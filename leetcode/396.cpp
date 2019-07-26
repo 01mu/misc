@@ -6,39 +6,38 @@ using namespace std;
 class Solution {
 public:
     int maxRotateFunction(vector<int>& A) {
-        vector<int> temp(A.size(), 0);
-        vector<int> totals;
-
         int z = 0;
         int max = 0;
+        int total = 0;
+        int i = 0;
+        int ft = 0;
 
-        if(A.size() == 0) return 0;
+        const int sz = A.size();
 
-        while(z < A.size()) {
-            int total = 0;
+        int newIdx;
 
-            for(int i = 0; i < A.size(); i++) {
-                int newIdx = i + z;
+        if(sz == 0) return 0;
 
-                if(newIdx >= A.size()) {
-                    newIdx -= A.size();
+        while(z < sz) {
+            for(i = 0; i < sz; i++) {
+                newIdx = i + z;
+
+                if(newIdx >= sz) {
+                    newIdx -= sz;
                 }
 
-                temp.at(i) = A.at(newIdx);
-                total += i * temp.at(i);
+                total += i * A.at(newIdx);
             }
 
-            totals.push_back(total);
+            if(ft == 0) {
+                max = total;
+                ft = 1;
+            } else if(total > max) {
+                max = total;
+            }
 
+            total = 0;
             z++;
-        }
-
-        max = totals.at(0);
-
-        for(int i = 1; i < totals.size(); i++) {
-            if(totals.at(i) > max) {
-                max = totals.at(i);
-            }
         }
 
         return max;
@@ -50,8 +49,8 @@ int main()
     Solution solution = Solution();
 
     //vector<int> A{};
-    //vector<int> A{4, 3, 2, 6};
-    vector<int> A{-2147483648, -2147483648};
+    vector<int> A{4, 3, 2, 6};
+    //vector<int> A{-2147483648, -2147483648};
 
     cout << solution.maxRotateFunction(A);
 }
