@@ -12,15 +12,16 @@ int check(string & a, string & b) {
     string z = a + b;
 
     int l = z.size();
-    int c = 0;
 
     for(int i = 0, j = z.size() - 1; i < z.size(); i++, j--) {
         if(z.at(i) == z.at(j)) {
-            c++;
+            l--;
         }
     }
 
-    if(c == l) {
+    if(l == 0) {
+        cout << z << endl;
+
         return 1;
     }
 }
