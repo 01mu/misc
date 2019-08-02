@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class Solution {
+/*class Solution {
 public:
     int maxRotateFunction(vector<int>& A) {
         int z = 0;
@@ -42,6 +42,35 @@ public:
 
         return max;
     }
+};*/
+
+class Solution {
+public:
+    int maxRotateFunction(vector<int>& A) {
+        int i = 0;
+
+        long long int mx = 0;
+        long long int total = 0;
+        long long int mult = 0;
+
+        long long int sz = A.size();
+
+        if(sz == 0) return 0;
+
+        for(i = 0; i < sz; i++) {
+            total += A.at(i);
+            mult += i * A.at(i);
+        }
+
+        mx = mult;
+
+        for(i = sz - 1; i >= 0; i--){
+            mult += total - sz * A.at(i);
+            mx = max(mx, mult);
+        }
+
+        return mx;
+    }
 };
 
 int main()
@@ -49,8 +78,9 @@ int main()
     Solution solution = Solution();
 
     //vector<int> A{};
-    vector<int> A{4, 3, 2, 6};
+    //vector<int> A{4, 3, 2, 6};
     //vector<int> A{-2147483648, -2147483648};
+    vector<int> A{2147483647,2147483647};
 
     cout << solution.maxRotateFunction(A);
 }
