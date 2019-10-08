@@ -7,30 +7,22 @@
 
 KeyValue::KeyValue() {
 
-
 }
 
-bool KeyValue::check_file_exists(const char * file) {
-    std::ifstream infile(file);
-    return infile.good();
-}
-
-void KeyValue::read_file(const char * file) {
-    int pos;
-
-    std::ifstream infile(file);
-
-    for(std::string line; getline(infile, line);) {
-        pos = line.find("=");
-        values[line.substr(0, pos)] = line.substr(pos + 1, line.size());
-    }
+KeyValue::KeyValue(const char * file) {
+    values.clear();
+    read(file);
 }
 
 void KeyValue::set(std::string key, std::string value) {
     values[key] = value;
 }
 
-void KeyValue::write_file(const char * file) {
+std::string KeyValue::get(std::string key) {
+    return values[key];
+}
+
+void KeyValue::update(const char * file) {
     std::ofstream f;
     f.open(file);
 
@@ -39,4 +31,15 @@ void KeyValue::write_file(const char * file) {
     }
 
     f.close();
+}
+
+void KeyValue::read(const char * file) {
+    int pos;
+
+    std::ifstream infile(file);
+
+    for(std::string line; getline(infile, line);) {
+        pos = line.find("=");
+        values[line.substr(0, pos)] = line.substr(pos + 1, line.size());
+    }
 }

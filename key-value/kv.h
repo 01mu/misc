@@ -1,10 +1,15 @@
 class KeyValue
 {
-public:
+private:
     std::unordered_map<std::string, std::string> values;
+
+public:
     KeyValue();
-    bool check_file_exists(const char * file);
-    void read_file(const char * file);
+    KeyValue(const char * file);
+
     void set(std::string key, std::string value);
-    void write_file(const char * file);
+    std::string get(std::string key);
+
+    void update(const char * file);
+    void read(const char * file);
 };

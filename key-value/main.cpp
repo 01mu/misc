@@ -4,12 +4,8 @@
 int main()
 {
     KeyValue kv = KeyValue();
-
-    kv.read_file("input");
+    kv.read("input");
     kv.set("z", "3");
-
-    std::cout << kv.values["z"];
-
-    kv.write_file("output");
+    printf("%s", kv.get("a").c_str());
+    kv.update("output");
 }
-
