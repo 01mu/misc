@@ -15,42 +15,45 @@ public:
 
         int count = 0;
 
-        for(int i = 0; i < y_len; i++) {
-            for(int j = 0; j < x_len; j++) {
-                if(board[i][j] == 'X') {
-                    /*if(board[i][j-1] == 'X') {
-                        cout << i << " " << j << endl;
-                    } else if(i >= 0 || board[i-1][j] == 'X') {
-                        cout << i << " " << j << endl;
-                    } */
+        for(int y = 0; y < y_len; y++) {
+            for(int x = 0; x < x_len; x++) {
+                char ch = board[y][x] ;
 
-                    if(board[i][j+1] == 'X') {  /* right */
-                        scan(board, j, i, 'r');
-                    } else if(i < y_len-1 && board[i+1][j] == 'X') {  /* down */
-                        scan(board, j, i, 'd');
+                if(ch == 'X') {
+                   if(board[y][x+1] == 'X') {
+                        int z = x;
+
+                        while(board[y][z] == 'X') {
+                            board[y][z] = '.';
+                            z++;
+                        }
+                    } else if(y < y_len-1 && board[y+1][x] == 'X') {
+                        int z = y;
+
+                        do {
+                            board[z][x] = '.';
+                            z++;
+
+                        } while(z < y_len && board[z][x] == 'X');
                     }
 
                     count++;
+                    board[y][x] = '.';
                 }
             }
         }
 
         return count;
     }
-
-    void scan(vector<vector<char>>& board, int x, int y, char dir) {
-
-
-    }
 };
 
 int main()
 {
-    vector<vector<char>> board(  {{'X', '.', 'X', 'X'},
-                                {'X', '.', '.', '.'},
-                                {'.', '.', '.', '.'}});
+    vector<vector<char>> board(  {{'X', '.', '.', 'X', 'X'},
+                                {'X', '.', 'X', '.', '.'},
+                                {'X', '.', 'X', '.', 'X'}});
 
     Solution solution;
 
-    cout << endl << solution.countBattleships(board);
+    cout << solution.countBattleships(board);
 }
