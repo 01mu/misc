@@ -13,29 +13,26 @@ public:
         int x_len = board[0].size();
         int y_len = board.size();
         int count = 0;
-        int z;
+        int x,  y, temp;
         char ch;
 
-        for(int y = 0; y < y_len; y++) {
-            for(int x = 0; x < x_len; x++) {
-                ch = board[y][x] ;
+        for(y = 0; y < y_len; y++) {
+            for(x = 0; x < x_len; x++) {
+                ch = board[y][x];
 
-                if(ch == 'X') {
-                   if(board[y][x+1] == 'X') {
-                        z = x;
+                if(ch == 'x') {
+                   if(board[y][x+1] == 'x') {
+                        temp = x;
 
-                        while(board[y][z] == 'X') {
-                            board[y][z] = '.';
-                            z++;
+                        while(board[y][temp] == 'x') {
+                            board[y][temp++] = '.';
                         }
-                    } else if(y < y_len-1 && board[y+1][x] == 'X') {
-                        z = y;
+                    } else if(y < y_len-1 && board[y+1][x] == 'x') {
+                        temp = y;
 
                         do {
-                            board[z][x] = '.';
-                            z++;
-
-                        } while(z < y_len && board[z][x] == 'X');
+                            board[temp++][x] = '.';
+                        } while(temp < y_len && board[temp][x] == 'x');
                     }
 
                     count++;
@@ -50,9 +47,9 @@ public:
 
 int main()
 {
-    vector<vector<char>> board(  {{'X', '.', '.', 'X', 'X'},
-                                {'X', '.', 'X', '.', '.'},
-                                {'X', '.', 'X', '.', 'X'}});
+    vector<vector<char>> board(  {{'x', '.', '.', 'x'},
+                                {'.', '.', '.', 'x'},
+                                {'.', '.', '.', 'x'}});
 
     Solution solution;
 
