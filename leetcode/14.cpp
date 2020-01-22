@@ -9,7 +9,7 @@ public:
         int i, j, g = strs.size()-1, c = 0;
         string s = strs[0], res = "";
 
-        for(i = 0; i < s.length(); i++) {
+        for(i = 0; i < s.length(); i++, c = 0) {
             for(j = 1; j < strs.size(); j++) {
                 if(strs[j][i] == s[i]) {
                     c++;
@@ -19,8 +19,6 @@ public:
             if(c == g) {
                 res.push_back(s[i]);
             }
-
-            c = 0;
         }
 
         return res;
