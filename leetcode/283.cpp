@@ -6,16 +6,16 @@ using namespace std;
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
-        int i, j, sz = nums.size(), k = 0;
+        int i, j, sz = nums.size(), k = 0, d = sz;
 
         for(i = 0; i < sz; i++) {
-            if(nums[i] == 0 && i <= sz-1-k) {
+            if(nums[i] == 0 && i <= d) {
                 for(j = i; j < sz-1; j++) {
                     nums[j] = nums[j+1];
                 }
 
                 nums[sz-1-i] = 0;
-                k++;
+                d = sz-1-(++k);
             }
         }
     }
