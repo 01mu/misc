@@ -7,12 +7,8 @@ using namespace std;
 class Solution {
 public:
     int maxNumberOfBalloons(string text) {
-        int c;
+        int c, d;
         unordered_map<char, int> a;
-
-        for(auto b : "balon") {
-            a[b] = 0;
-        }
 
         for(char b : text) {
             switch(b) {
@@ -26,20 +22,21 @@ public:
             }
         }
 
-        c = a['b'];
+        c = min(a['b'], min(a['a'], a['n']));
+        d = min(a['l'], a['o']);
 
-        if(a['a'] >= c && a['l'] >= c*2 && a['o'] >= c*2 && a['n'] >= c) {
+        if(d >= 2*c) {
             return c;
+        } else {
+            return d;
         }
-
-        return 0;
     }
 };
 
 int main()
 {
     Solution solution;
-    string text = "loonbalxballpoon";
+    string text = "loonbalxballpoonb";
 
     cout << solution.maxNumberOfBalloons(text);
 }
