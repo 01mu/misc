@@ -6,14 +6,9 @@ using namespace std;
 class Solution {
 public:
     int balancedStringSplit(string s) {
-        int i, c = 0, lk = 0, x, ct = 0;
+        int i, c = 0, ct = 0;
 
         for(i = 0; i < s.length(); i++) {
-            if(lk == 0) {
-                lk = 1;
-                x = i;
-            }
-
             if(s[i] == 'R') {
                 c++;
             } else {
@@ -22,8 +17,6 @@ public:
 
             if(c == 0) {
                 ct++;
-                lk = 0;
-                cout << s.substr(x, i+1)  << " " << x << " " << i << endl;
             }
         }
 
@@ -34,7 +27,7 @@ public:
 int main()
 {
     Solution solution;
-    string s = "RLRRRLLRLL";
+    string s = "RLRRLLRLRL";
 
     cout << solution.balancedStringSplit(s);
 }
