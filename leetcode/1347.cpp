@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include <unordered_map>
 
 using namespace std;
@@ -7,20 +6,32 @@ using namespace std;
 class Solution {
 public:
     int minSteps(string s, string t) {
-        int i, c = 0;
-        unordered_map<char, int> m;
-
-        sort(s.begin(), s.end());
-        sort(t.begin(), t.end());
+        int i, c = 0, z;
+        unordered_map<char, int> a, b;
 
         for(i = 0; i < s.length(); i++) {
-            if(s[i] != t[i] && m[s[i]] == 0) {
-                m[s[i]] += 1;
+            a[s[i]]++;
+            b[t[i]]++;
+        }
+
+        for(auto & v : a) {
+            if(a[v.first] > 0 && b[v.first] == 0) {
+                cout << v.first << ", ";
                 c++;
+            } else if(a[v.first] > 1 && b[v.first] > 0) {
+                z = (a[v.first] - b[v.first]);
+                cout << v.first << " (" << z << "), ";
+                c += z;
             }
         }
 
-        cout << s << endl << t;
+        cout << endl;
+
+        for(auto & v : b) {
+            if(b[v.first] > a[v.first]) {
+                cout << v.first << ", ";
+            }
+        }
 
         return c;
     }
