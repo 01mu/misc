@@ -15,16 +15,14 @@ public:
         }
 
         for(auto & v : a) {
+            z = a[v.first]-b[v.first];
+
             if(a[v.first] > 0 && b[v.first] == 0) {
                 display(v.first, a[v.first]);
                 c++;
-            } else if(a[v.first] > 0 && b[v.first] > 0) {
-                z = (a[v.first] - b[v.first]);
-
-                if(z >= 1) {
-                    display(v.first, z);
-                    c += z;
-                }
+            } else if(z > 0) {
+                display(v.first, z);
+                c += z;
             }
         }
 
@@ -44,7 +42,7 @@ public:
     void display(char ch, int a) {
         int i;
 
-        for(i = 0; i < a; i ++) {
+        for(i = 0; i < a; i++) {
             cout << ch << " ";
         }
     }
@@ -53,7 +51,7 @@ public:
 int main()
 {
     Solution solution;
-    string s = "anagram", t = "smodoaa";
+    string s = "azbdd", t = "adbbb";
 
     cout << solution.minSteps(s, t);
 }
