@@ -13,17 +13,21 @@ public:
     }
 
     void add(int num) {
-        values.push_back(num);
+        if(num) {
+            values.push_back(values[values.size()-1]*num);
+        } else {
+            values = {1};
+        }
     }
 
     int getProduct(int k) {
-        int i, p = 1, sz = values.size();
+        int v = 0;
 
-        for(i = sz-1; i >= sz-k; i--) {
-            p *= values[i];
+        if(k < values.size()) {
+            v = values.back() / values[values.size() - k - 1];
         }
 
-        return p;
+        return v;
     }
 };
 
@@ -36,5 +40,5 @@ int main()
         obj->add(i);
     }
 
-    cout << obj->getProduct(3);
+    cout << obj->getProduct(1);
 }
