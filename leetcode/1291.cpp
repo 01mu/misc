@@ -14,12 +14,27 @@ public:
             v = 123456789/(int) pow(10, 9-i);
 
             while(v <= pow(10, 9)/pow(10, 9-i)) {
-                cout << v << endl;
-                v += 1111;
+                v += st(i);
+
+                if(v >= low && v <= high) {
+                    cout << v << endl;
+                }
             }
         }
 
         return res;
+    }
+
+    int st(int c)
+    {
+        int i;
+        string r = "";
+
+        for(i = 0; i < c; i++) {
+            r+= "1";
+        }
+
+        return stoi(r);
     }
 
     int digits(long long n)
@@ -40,7 +55,7 @@ int main()
 {
     Solution solution;
 
-    int low = 1121, high = 1221;
+    int low = 121, high = 9999;
 
     solution.sequentialDigits(low, high);
 }
