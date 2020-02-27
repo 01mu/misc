@@ -17,7 +17,7 @@ private:
 
         ListNode * t = l;
 
-        while(t != NULL){
+        while(t != NULL) {
             val += t->val * pow(10, i++);
             t = t->next;
         }
@@ -76,5 +76,4 @@ int main()
         cout << t->val;
         t = t->next;
     }
-
 }
