@@ -1,27 +1,36 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 using namespace std;
 
 class Solution {
 public:
     vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
-        int i, c = 0, t = 0, p;
-        vector<int> res;
+        int c = 0, t = 0, p;
+
+        vector<int> res(nums.size());
+
+        unordered_map<int, int> a;
+        unordered_map<int, vector<int>> b;
+
+        for(int i = 0; i < nums.size(); i++) {
+            b[nums[i]].push_back(i);
+        }
 
         sort(nums.begin(), nums.end());
 
-        for(i = 0; i < nums.size(); i++) {
-            if(nums[i] > p) {
+        for(int i : nums) {
+            if(i > p) {
                 (++c) += t;
                 t = 0;
-            } else if(nums[i] == p) {
-                t += 1;
+            } else if(i == p) {
+                t++;
             }
 
-            res.push_back(c);
-            p = nums[i];
+            res[b[i][a[i]++]] = c;
+            p = i;
         }
 
         return res;
@@ -34,7 +43,7 @@ int main()
 
     vector<int> nums{8, 1, 2, 2, 3};
 
-    for(auto i : solution.smallerNumbersThanCurrent(nums)) {
+    for(int i : solution.smallerNumbersThanCurrent(nums)) {
         cout << i << " ";
     }
 }
