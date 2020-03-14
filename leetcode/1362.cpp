@@ -40,7 +40,7 @@ public:
 int main()
 {
     Solution solution;
-    int num = 123;
+    int num = 999;
 
     vector<int> res = solution.closestDivisors(num);
 

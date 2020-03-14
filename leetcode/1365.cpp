@@ -8,29 +8,29 @@ using namespace std;
 class Solution {
 public:
     vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
-        int c = 0, t = 0, p;
+        int i = 0, c = 0, t = 0, p;
 
         vector<int> res(nums.size());
 
         unordered_map<int, int> a;
         unordered_map<int, vector<int>> b;
 
-        for(int i = 0; i < nums.size(); i++) {
-            b[nums[i]].push_back(i);
+        while(i < nums.size()) {
+            b[nums[i]].push_back(i++);
         }
 
         sort(nums.begin(), nums.end());
 
-        for(int i : nums) {
-            if(i > p) {
+        for(int j : nums) {
+            if(j > p) {
                 (++c) += t;
                 t = 0;
-            } else if(i == p) {
+            } else if(j == p) {
                 t++;
             }
 
-            res[b[i][a[i]++]] = c;
-            p = i;
+            res[b[j][a[j]++]] = c;
+            p = j;
         }
 
         return res;
