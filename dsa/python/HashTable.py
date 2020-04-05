@@ -1,3 +1,46 @@
+from SortedList import SortedList
+
+class HashMapSL:
+    def __init__(self, size):
+        self.size = size
+        self.array = [None] * size
+
+        for i in range(size):
+            self.array[i] = SortedList()
+
+    def hash_func(self, key):
+        return key % self.size
+
+    def hash_str(self, key):
+        hash_val = 0
+
+        for char in key:
+            hash_val = (hash_val * 27 + ord(char)) % self.size
+
+        return hash_val
+
+    def display(self):
+        i = 0
+
+        for v in self.array:
+            print(i, end = ': ')
+            v.display()
+            i += 1
+
+    def insert(self, key, data):
+        find = self.find(key)
+
+        if find == None:
+            self.array[self.hash_str(key)].insert(key, data)
+        else:
+            find.data = data
+
+    def remove(self, key):
+        self.array[self.hash_str(key)].remove(key)
+
+    def find(self, key):
+        return self.array[self.hash_str(key)].find(key)
+
 class HashMap:
     class Item:
         def __init__(self, data):
@@ -9,10 +52,10 @@ class HashMap:
         self.delete = self.Item(-1)
 
     def hash_func(self, key):
-        return key & self.size
+        return key % self.size
 
     def hash_func_step(self, key):
-        return 5 - key & self.size
+        return 5 - key % self.size
 
     def insert(self, item):
         key = item.data
@@ -20,9 +63,7 @@ class HashMap:
         step_size = self.hash_func_step(key)
 
         while self.array[hash_val] != None and self.array[hash_val].data != -1:
-            #hash_val += 1
             hash_val += step_size
-
             hash_val %= self.size
 
         print(hash_val),
@@ -37,12 +78,9 @@ class HashMap:
             if self.array[hash_val].data == key:
                 temp = self.array[hash_val]
                 self.array[hash_val] = self.delete
-
                 return temp
 
-            #hash_val += 1
             hash_val += step_size
-
             hash_val %= self.size
 
         return None
@@ -55,9 +93,7 @@ class HashMap:
             if self.array[hash_val].data == key:
                 return self.array[hash_val]
 
-            #hash_val +=1
             hash_val += step_size
-
             hash_val %= self.size
 
         return None
@@ -72,10 +108,3 @@ class HashMap:
                 print('*'),
 
             j += 1
-
-
-hm = HashMap(7)
-
-for i in range(3):
-    hm.insert(HashMap.Item(i))
-
