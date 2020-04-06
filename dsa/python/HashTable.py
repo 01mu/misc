@@ -41,6 +41,15 @@ class HashMapSL:
     def find(self, key):
         return self.array[self.hash_str(key)].find(key)
 
+    def __setitem__(self, key, value):
+        return self.insert(key, value)
+
+    def __getitem__(self, key):
+        return self.find(key).data
+
+    def __delitem__(self, key):
+        return self.remove(key)
+
 class HashMap:
     class Item:
         def __init__(self, data):
