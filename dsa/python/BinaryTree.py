@@ -43,12 +43,6 @@ class BinaryTree:
             if p.right != None:
                 queue.add(p.right)
 
-    def inorder(self):
-        self.do_inorder(self.root)
-
-    def postorder(self):
-        self.do_postorder(self.root)
-
     def do_dfs(self, node):
         print(node.val),
 
@@ -57,15 +51,3 @@ class BinaryTree:
 
         if node.right != None:
             self.do_dfs(node.right)
-
-    def do_inorder(self, node):
-        if node != None:
-            self.do_inorder(node.left)
-            print(node.val),
-            self.do_inorder(node.right)
-
-    def do_postorder(self, node):
-        if node != None:
-            self.do_postorder(node.right)
-            print(node.val),
-            self.do_postorder(node.left)
