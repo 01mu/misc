@@ -159,15 +159,3 @@ class BST:
             successor.left = current.left
 
         return True
-
-
-bst = BST(22)
-bst.insert(5)
-bst.insert(10)
-bst.insert(3)
-bst.insert(122)
-bst.insert(121)
-bst.insert(12)
-bst.insert(33)
-bst.delete(22)
-print(bst.inorder())
