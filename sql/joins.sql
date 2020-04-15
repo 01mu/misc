@@ -1,107 +1,6 @@
-DROP DATABASE fun;
-CREATE DATABASE fun;
-USE fun;
+# Load tables
 
-# Students
-
-CREATE TABLE students (
-    name VARCHAR(30), student_id INT(3),
-    INDEX (student_id),
-    PRIMARY KEY(student_id)
-);
-
-# Hobbies
-
-CREATE TABLE hobbies (
-    hobby VARCHAR(30), cost INT(3),
-    INDEX (hobby),
-    PRIMARY KEY(hobby)
-);
-
-# Hobbies followed by students
-
-CREATE TABLE student_hobbies (
-    student_id INT(3), hobby VARCHAR(30),
-    PRIMARY KEY(student_id, hobby),
-    FOREIGN KEY (student_id) REFERENCES students (student_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    FOREIGN KEY (hobby) REFERENCES hobbies (hobby)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-);
-
-# Hobby ratings provided by students
-
-CREATE TABLE student_hobby_ratings (
-    student_id INT(3), hobby VARCHAR(30), rating INT(3),
-    PRIMARY KEY(student_id, hobby, rating),
-    FOREIGN KEY (student_id) REFERENCES students (student_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    FOREIGN KEY (hobby) REFERENCES hobbies (hobby)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-);
-
-# Insert into tables
-
-INSERT INTO students VALUES ("Joe", 123), ("Sally", 456), ("Martin", 789),
-    ("Martin", 1000), ("Lisa", 1), ("Dirt", 2);
-
-#+--------+------------+
-#| name   | student_id |
-#+--------+------------+
-#| Lisa   |          1 |
-#| Dirt   |          2 |
-#| Joe    |        123 |
-#| Sally  |        456 |
-#| Martin |        789 |
-#| Martin |       1000 |
-#+--------+------------+
-
-INSERT INTO hobbies VALUES ("Golfing", 23), ("Swimming", 55), ("Hiking", 100),
-    ("Dancing", 1), ("Painting", 222), ("Astroturfing", 1000), ("Rowing", 1);
-
-#+--------------+------+
-#| hobby        | cost |
-#+--------------+------+
-#| Astroturfing | 1000 |
-#| Dancing      |    1 |
-#| Golfing      |   23 |
-#| Hiking       |  100 |
-#| Painting     |  222 |
-#| Rowing       |    1 |
-#| Swimming     |   55 |
-#+--------------+------+
-
-INSERT INTO student_hobbies VALUES (123, "Golfing"), (456, "Swimming"),
-    (789, "Hiking"), (789, "Swimming"), (1, "Swimming"), (456, "Hiking"),
-    (2, "Astroturfing"), (123, "Rowing");
-
-#+------------+--------------+
-#| student_id | hobby        |
-#+------------+--------------+
-#|          2 | Astroturfing |
-#|        456 | Hiking       |
-#|        789 | Hiking       |
-#|          1 | Swimming     |
-#|        456 | Swimming     |
-#|        789 | Swimming     |
-#+------------+--------------+
-
-INSERT INTO student_hobby_ratings VALUES (123, "Golfing", 10),
-    (1000, "Swimming", 5), (123, "Swimming", 5), (2, "Painting", 0),
-    (123, "Hiking", 100);
-
-#+------------+----------+--------+
-#| student_id | hobby    | rating |
-#+------------+----------+--------+
-#|        123 | Hiking   |    100 |
-#|          2 | Painting |      0 |
-#|        123 | Swimming |      5 |
-#|       1000 | Swimming |      5 |
-#+------------+----------+--------+
+source tables/student_hobbies.sql;
 
 # Find hobbies that have no followers
 
@@ -109,7 +8,7 @@ SELECT hobbies.hobby
 FROM student_hobbies
 RIGHT JOIN hobbies
     ON student_hobbies.hobby = hobbies.hobby
-WHERE student_hobbies.hobby is NULL;
+WHERE student_hobbies.hobby IS NULL;
 
 #+----------+
 #| hobby    |
@@ -121,13 +20,13 @@ WHERE student_hobbies.hobby is NULL;
 # Find students that do not have a hobby but have provided a hobby rating
 
 SELECT students.student_id, students.name, student_hobby_ratings.hobby,
-student_hobby_ratings.rating
+    student_hobby_ratings.rating
 FROM students
 LEFT JOIN student_hobbies
     ON students.student_id = student_hobbies.student_id
 INNER JOIN student_hobby_ratings
     ON students.student_id = student_hobby_ratings.student_id
-WHERE student_hobbies.hobby is NULL;
+WHERE student_hobbies.hobby IS NULL;
 
 #+------------+--------+----------+--------+
 #| student_id | name   | hobby    | rating |
@@ -135,11 +34,47 @@ WHERE student_hobbies.hobby is NULL;
 #|       1000 | Martin | Swimming |      5 |
 #+------------+--------+----------+--------+
 
+# Insert tudents who do not have hobbies with hobbies nobody prefers
+
+START TRANSACTION;
+
+INSERT INTO student_hobbies
+    (SELECT b.student_id, a.hobby
+    FROM (SELECT hobbies.hobby
+        FROM student_hobbies
+        RIGHT JOIN hobbies
+            ON student_hobbies.hobby = hobbies.hobby
+        WHERE student_hobbies.hobby IS NULL) AS a
+    INNER JOIN (SELECT students.student_id, students.name
+        FROM students
+        LEFT JOIN student_hobbies
+            ON students.student_id = student_hobbies.student_id
+        WHERE student_hobbies.hobby IS NULL) AS b);
+
+SELECT * from student_hobbies;
+
+ROLLBACK;
+
+#+------------+--------------+
+#| student_id | hobby        |
+#+------------+--------------+
+#|          2 | Astroturfing |
+#|       1000 | Dancing      |
+#|        123 | Golfing      |
+#|        456 | Hiking       |
+#|        789 | Hiking       |
+#|       1000 | Painting     |
+#|        123 | Rowing       |
+#|          1 | Swimming     |
+#|        456 | Swimming     |
+#|        789 | Swimming     |
+#+------------+--------------+
+
 # Find hobbies shared between multiple students and the names of the students
 
 SELECT DISTINCT (students.student_id), students.name, a.hobby
-FROM student_hobbies as a
-INNER JOIN student_hobbies as b
+FROM student_hobbies AS a
+INNER JOIN student_hobbies AS b
     ON a.hobby = b.hobby AND a.student_id <> b.student_id
 INNER JOIN students
     ON a.student_id = students.student_id;
@@ -156,14 +91,14 @@ INNER JOIN students
 
 # Get shared hobbies that have more than one student rating
 
-SELECT a.hobby, COUNT(rating) as rating_count
-FROM student_hobby_ratings as a
+SELECT a.hobby, COUNT(rating) AS rating_count
+FROM student_hobby_ratings AS a
 INNER JOIN (SELECT DISTINCT (a.hobby)
-    FROM student_hobbies as a
-    INNER JOIN student_hobbies as b
+    FROM student_hobbies AS a
+    INNER JOIN student_hobbies AS b
         ON a.hobby = b.hobby AND a.student_id <> b.student_id
     INNER JOIN students
-        ON a.student_id = students.student_id) as b
+        ON a.student_id = students.student_id) AS b
     ON a.hobby = b.hobby
 GROUP BY (a.hobby)
 HAVING (rating_count > 1);
@@ -174,11 +109,11 @@ HAVING (rating_count > 1);
 #| Swimming |            2 |
 #+----------+--------------+
 
-# For each student, get the number of their hobbies and the sum of their costs
+# For each student get the number of their hobbies and the sum of their costs
 
 SELECT students.student_id, students.name,
-COUNT(student_hobbies.student_id) as hobby_count,
-SUM(hobbies.cost) as hobby_cost_sum
+COUNT(student_hobbies.student_id) AS hobby_count,
+SUM(hobbies.cost) AS hobby_cost_sum
 FROM hobbies
 INNER JOIN student_hobbies
     ON hobbies.hobby = student_hobbies.hobby
@@ -199,12 +134,13 @@ ORDER BY hobby_cost_sum DESC;
 
 # Delete the hobbies enjoyed by the student with the lowest cost sum
 
+START TRANSACTION;
+
 DELETE hobbies
 FROM hobbies
-INNER JOIN (SELECT hobby # hobbies of the lowest sum student
+INNER JOIN (SELECT hobby
     FROM student_hobbies
-    INNER JOIN (SELECT students.student_id, # student_id of lowest sum student
-        SUM(hobbies.cost) as hobby_cost_sum
+    INNER JOIN (SELECT students.student_id, SUM(hobbies.cost) AS hobby_cost_sum
         FROM hobbies
         INNER JOIN student_hobbies
             ON hobbies.hobby = student_hobbies.hobby
@@ -212,11 +148,13 @@ INNER JOIN (SELECT hobby # hobbies of the lowest sum student
             ON student_hobbies.student_id = students.student_id
         GROUP BY(students.student_id)
         ORDER BY hobby_cost_sum ASC
-        LIMIT 1) as a
-    ON student_hobbies.student_id = a.student_id) as a
+        LIMIT 1) AS a
+    ON student_hobbies.student_id = a.student_id) AS a
 ON hobbies.hobby = a.hobby;
 
 SELECT * FROM hobbies;
+
+ROLLBACK;
 
 #+--------------+------+
 #| hobby        | cost |
@@ -227,5 +165,3 @@ SELECT * FROM hobbies;
 #| Painting     |  222 |
 #| Swimming     |   55 |
 #+--------------+------+
-
-INSERT INTO hobbies VALUES ("Golfing", 23), ("Rowing", 1);
