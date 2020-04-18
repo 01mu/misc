@@ -1,5 +1,4 @@
-# Load tables
-
+source clear.sql;
 source tables/student_hobbies.sql;
 
 # Find hobbies that have no followers
@@ -34,7 +33,7 @@ WHERE student_hobbies.hobby IS NULL;
 #|       1000 | Martin | Swimming |      5 |
 #+------------+--------+----------+--------+
 
-# Insert tudents who do not have hobbies with hobbies nobody prefers
+# Insert into student_hobby with no hobby students and unfollowed hobbies
 
 START TRANSACTION;
 

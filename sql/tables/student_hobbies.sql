@@ -1,9 +1,3 @@
-# Clear tables
-
-DROP DATABASE fun;
-CREATE DATABASE fun;
-USE fun;
-
 # Students
 
 CREATE TABLE students (
