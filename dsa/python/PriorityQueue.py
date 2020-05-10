@@ -26,9 +26,6 @@ class PriorityQueue:
         new_node = self.Node(value)
         self.array[index] = new_node
 
-    def increment_size(self):
-        self.current_size += 1
-
     def trickle_up(self, index):
         parent = int((index - 1) / 2)
         bottom = self.array[index]
@@ -85,30 +82,30 @@ class PriorityQueue:
 
         return True
 
-pq = PriorityQueue(10)
-j = 0
+    def sort(self):
+        old_size = self.current_size
 
-for i in [70, 40, 50, 20, 60, 100, 80, 30, 10, 90]:
-    pq.insert_at(j, i)
-    pq.increment_size()
-    j += 1
+        temp = [None] * self.current_size
+        j = 0
 
-j = pq.current_size / 2 - 1
+        for i in self.array:
+            new_node = self.Node(i.value)
+            temp[j] = new_node
 
-while j >= 0:
-    pq.trickle_down(int(j))
-    j -= 1
+            j += 1
 
-j = pq.current_size - 1
+        self.array = temp
 
-while j >= 0:
-    pq.insert_at(int(j), pq.remove().value)
-    j -= 1
+        j = self.current_size / 2 - 1
 
-#pq.remove()
-#pq.remove()
+        while j >= 0:
+            self.trickle_down(int(j))
+            j -= 1
 
-#pq.change(0, 1)
+        j = self.current_size - 1
 
-for v in pq.array:
-    print(v.value)
+        while j >= 0:
+            self.insert_at(int(j), self.remove().value)
+            j -= 1
+
+        self.current_size = old_size
