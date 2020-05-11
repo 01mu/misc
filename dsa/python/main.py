@@ -1,12 +1,8 @@
 from PriorityQueue import PriorityQueue
 
-pq = PriorityQueue(10)
-j = 0
-
-for i in [70, 40, 50, 20, 60, 100, 80, 30, 10, 90]:
-    pq.insert(i)
-
+pq = PriorityQueue([1,2,3,4,5,6])
+pq.insert(7)
+#pq.remove()
+#pq.remove()
 pq.sort()
-
-for v in pq.array:
-    print(v.value)
+pq.display()
