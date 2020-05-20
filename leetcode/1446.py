@@ -10,7 +10,6 @@ class Solution(object):
                 c = 1
         return max(vals)
 
-
 s = "hooraaaaaaaaaaay"
 
 solution = Solution()
