@@ -1,8 +1,5 @@
 class Solution(object):
     def minReorder(self, n, connections):
-        a = {}
-        count = 0
-
         class Node:
             def __init__(self, val, t, parent):
                 self.to = []
@@ -12,6 +9,9 @@ class Solution(object):
 
                 if t != None:
                     self.to.append(t)
+
+        a = {}
+        count = 0
 
         a[0] = Node(0, None, None)
 
