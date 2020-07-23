@@ -1,3 +1,4 @@
+#"Grokking Algorithms"
 def qs(array):
   if len(array) < 2:
     return array
