@@ -3,33 +3,35 @@
 
 char * getSmallestString(int n, int k) {
     char * smallest = malloc((sizeof(char) * n) + 1);
-    int hold[n], last, i;
+    int arr[n], dec, i;
 
     smallest[0] = '\0';
 
     for(i = 0; i < n; i++) {
-        if(k >= 26) {
-            hold[i] = 26;
-            last = i;
+        if(k > 0) {
+            if(k >= 26) {
+                arr[i] = 26;
+            } else {
+                arr[i] = k;
+            }
+
+            if(k > 1) {
+                dec = i;
+            }
+
             k -= 26;
         } else {
-            if(k > 0) {
-                hold[i] = k;
+            arr[i] = 1;
+            arr[dec] -= 1;
 
-                if(k != 1) {
-                    last = i;
-                }
-
-                k = 0;
-            } else {
-                hold[i] = 1;
-                hold[last] -= 1;
+            if(arr[dec] == 1) {
+                dec--;
             }
         }
     }
 
     for(i = n - 1; i >= 0; i--) {
-        sprintf(smallest, "%s%c", smallest, hold[i] + 96);
+        sprintf(smallest, "%s%c", smallest, arr[i] + 96);
     }
 
     return smallest;
